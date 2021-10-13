@@ -41,13 +41,9 @@ app.get('/', (req, res) => {
 
 });
 
-app.post('/api/courses', (req, res) => {
-    const course = {};
-    course.id = courses.length + 1;
-    console.log(req);
-    course.name = req.body.name;
-    courses.push(course);
-    res.send(course);
+app.post('/api', (req, res) => {
+    console.log(req.body);
+    res.send(JSON.stringify(req.body));
 });
 
 const port = 1010;
