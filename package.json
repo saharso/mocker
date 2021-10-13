@@ -1,5 +1,18 @@
 {
   "scripts": {
-    "start": "node ./mocker.js"
+    "start": "nodemon mocker.js",
+    "start2": "node mocker.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.2",
+    "mongoose": "^5.13.7"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }
