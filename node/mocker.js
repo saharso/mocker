@@ -1,41 +1,22 @@
 const fs = require('fs');
+require('dotenv/config');
 
-const makeDir = require('./utils/makeDir').makeMocksDir
-//
-makeDir('./mocks');
-makeDir('./schemas');
-//
-//
-// let schema = {
-//     name: 'Mike',
-//     age: 23,
-//     gender: 'Male',
-//     department: 'English',
-//     car: 'Foo'
-// };
-//
-// let data = JSON.stringify(schema);
-// fs.writeFileSync('./mocks/student-2.json', data);
+const getFiles = require('./utils/getFiles').getFiles;
+const makeDir = require('./utils/makeDir').makeMocksDir;
 
 const express = require('express');
-require('dotenv/config');
+
+makeDir('./mocks');
+makeDir('./schemas');
+
 const app = express();
+
 app.use(express.json());
 
-// Routes
-// const postRoutes = require('./routes/posts');
-// app.use('/api/posts', postRoutes);
-
-
-function getFiles(path, callback){
-    fs.readdir(path, (err, files) => {
-        const parsedFiles = files.map((file, index) => ({id: index, name: file.split('.')[0]}))
-        callback(parsedFiles)
-    });
-}
-
+// all static files in 'scripts' directory available to server
 app.use(express.static('./scripts'));
 
+// serve the "index.html" file
 app.get('/', (req, res) => {
     fs.readFile('./index.html', function (err, html) {
         res.write(html);
@@ -44,19 +25,22 @@ app.get('/', (req, res) => {
 
 });
 
-app.post('/api/addSchema', (req, res) => {
-    console.log(req.body);
 
+app.post('/api/addSchema', (req, res) => {
     const raw = JSON.stringify(req.body);
     const data = JSON.parse(raw);
-
     const fileName = data.fileName;
     const fileContent = JSON.parse(data.value)
 
-    // console.log(data);
+    if(!fileName) {
+        return res.status(400).send({
+            error: 'Please add file name'
+        });
+    } else {
+        fs.writeFileSync(`./schemas/${fileName}.json`, JSON.stringify(fileContent));
+        res.send(JSON.stringify(req.body));
+    }
 
-    fs.writeFileSync(`./schemas/${fileName}.json`, JSON.stringify(fileContent));
-    res.send(JSON.stringify(req.body));
 });
 
 app.get('/api/getSchemaFiles', (req, res)=>{

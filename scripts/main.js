@@ -41,18 +41,16 @@ require(["vs/editor/editor.main"], () => {
 
 });
 
-window.save.addEventListener('click', ()=>{
+window.save.addEventListener('click', async ()=>{
     const value = window.editor.getValue();
     const data = {
         value,
         fileName: window.filename.value,
     }
 
-    postData('/api/addSchema', data)
-        .then(data => {
-            console.log(data); // JSON data parsed by `data.json()` call
-            getSchemaFiles();
-        });
+    const d = await postData('/api/addSchema', data);
+
+    !d.error ? getSchemaFiles() : console.error(d.error);
 });
 
 window.clearEditor.addEventListener('click', ()=>{
@@ -66,7 +64,6 @@ function getSchemaFiles(){
     })
 }
 function fileTemplate(fileId, fileName){
-    console.log(getFile);
     return `<div id="wrapper_${fileId}" class="file-item">
                  <input id="checkbox_${fileId}" type="checkbox" />
                  <button id="getFile_${fileId}" onclick="getFile('${fileName}')">${fileName}</button>
