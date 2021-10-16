@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon mocker.js",
-    "start2": "node mocker.js"
+    "start": "nodemon node/mocker.js",
+    "start2": "node node/mocker.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
