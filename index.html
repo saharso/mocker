@@ -11,7 +11,10 @@
         }
         .panel {
             display: grid;
-            grid-template-columns: 100vh 1fr;
+            grid-template-columns: 200px 1fr;
+        }
+        .panel__files {
+            width: 200px;
         }
     </style>
 </head>
@@ -24,6 +27,9 @@
             </ul>
         </aside>
         <main class="main">
+
+            <button id="clearEditor">Clear</button>
+
             <code id="container"></code>
 
             <input id="filename" type="text"/>
@@ -90,6 +96,10 @@
                     console.log(data); // JSON data parsed by `data.json()` call
                     getSchemaFiles();
                 });
+        });
+
+        window.clearEditor.addEventListener('click', ()=>{
+            editor.getModel().setValue('{}');
         })
 
         function getSchemaFiles(){
