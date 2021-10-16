@@ -38,7 +38,11 @@ app.post('/api/addSchema', (req, res) => {
         });
     } else {
         fs.writeFileSync(`./mocks/schemas/${fileName}.json`, JSON.stringify(fileContent));
-        res.send(JSON.stringify(req.body));
+        getFiles('./mocks/schemas', (files) => {
+
+            res.send(JSON.stringify(req.body));
+        });
+
     }
 
 });
@@ -49,9 +53,8 @@ app.get('/api/getSchemaFiles', (req, res)=>{
     })
 });
 app.get('/api/getSchemaFile/:id',(req,res)=>{
-    const buffer = fs.readFileSync(`./schemas/${req.params.id}.json`);
-    console.log(buffer.toString())
-    res.send(JSON.stringify(buffer.toString()));
+    const fileContentBuffer = fs.readFileSync(`./schemas/${req.params.id}.json`);
+    res.send(JSON.stringify(fileContentBuffer.toString()));
 })
 
 const port = 1010;
