@@ -16,14 +16,12 @@ function getHead(method = 'POST', data){
     return head;
 }
 async function postData(url = '/api', data = {}) {
-
     const response = await fetch(url, getHead('POST', data));
 
     return response.json();
 }
 
 async function getData(url = '/api', data = {}) {
-
     const response = await fetch(url, getHead('GET', data));
 
     return response.json();
@@ -50,7 +48,7 @@ window.save.addEventListener('click', async ()=>{
 
     const d = await postData('/api/addSchema', data);
 
-    !d.error ? getSchemaFiles() : console.error(d.error);
+    !d.error ? addToSchemasList(d) : console.error(d.error);
 });
 
 window.clearEditor.addEventListener('click', ()=>{
@@ -59,30 +57,31 @@ window.clearEditor.addEventListener('click', ()=>{
 
 function getSchemaFiles(){
     getData('/api/getSchemaFiles').then((data)=>{
-        console.log(data);
         fileListToHTML(data)
     })
 }
 function fileTemplate(fileId, fileName){
     return `<div id="wrapper_${fileId}" class="file-item">
                  <input id="checkbox_${fileId}" type="checkbox" />
-                 <button id="getFile_${fileId}" onclick="getFile('${fileName}')">${fileName}</button>
+                 <button id="getFile_${fileId}" onclick="getFileContent('${fileName}')">${fileName}</button>
             </div>`
 }
 function updateFileItem(file){
     const listHTML = window.fileList;
     const li = document.createElement('li');
     li.innerHTML = fileTemplate(file.id, file.name);
-    listHTML.appendChild(li)
+    listHTML.appendChild(li);
 }
 function fileListToHTML(fileList){
     fileList.forEach(updateFileItem)
 }
-function getFile(fileName) {
-    console.log(fileName);
+function getFileContent(fileName) {
     getData('/api/getSchemaFile/' + fileName).then((data)=>{
-        console.log(data);
         editor.getModel().setValue(data);
     })
+}
+
+function addToSchemasList(data){
+    console.log(data);
 }
 getSchemaFiles();

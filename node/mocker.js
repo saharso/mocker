@@ -6,8 +6,8 @@ const makeDir = require('./utils/makeDir').makeMocksDir;
 
 const express = require('express');
 
-makeDir('./mocks');
-makeDir('./schemas');
+makeDir('./mocks/lists');
+makeDir('./mocks/schemas');
 
 const app = express();
 
@@ -37,14 +37,14 @@ app.post('/api/addSchema', (req, res) => {
             error: 'Please add file name'
         });
     } else {
-        fs.writeFileSync(`./schemas/${fileName}.json`, JSON.stringify(fileContent));
+        fs.writeFileSync(`./mocks/schemas/${fileName}.json`, JSON.stringify(fileContent));
         res.send(JSON.stringify(req.body));
     }
 
 });
 
 app.get('/api/getSchemaFiles', (req, res)=>{
-    getFiles('./schemas', (files)=>{
+    getFiles('./mocks/schemas', (files)=>{
         res.send(JSON.stringify(files));
     })
 });
