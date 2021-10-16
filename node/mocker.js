@@ -34,11 +34,8 @@ function getFiles(path, callback){
     });
 }
 
-const courses = [
-    {id: 1, name: 'course 1'},
-    {id: 2, name: 'course 2'},
-    {id: 3, name: 'course 3'},
-]
+app.use(express.static('./scripts'));
+
 app.get('/', (req, res) => {
     fs.readFile('./index.html', function (err, html) {
         res.write(html);
